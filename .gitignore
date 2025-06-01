@@ -1,0 +1,66 @@
+# Visual Studio files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.cache
+*.csproj.*.user
+
+# Build output
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+
+# NuGet packages
+*.nupkg
+packages/
+!packages/build/
+
+# Visual Studio temporary files
+*.vs/
+.vscode/
+*.code-workspace
+
+# Test results
+TestResults/
+*.trx
+*.xml
+
+# .NET Core
+*.csproj.user
+*.swp
+*~
+*.lock.json
+*.publishsettings
+
+# Rider IDE
+.idea/
+*.iml
+
+# Azure and other deployment-related files
+*.azurePipelines.yml
+*.azure-pipelines.yml
+*.publishproj
+
+# Dependency directories
+node_modules/
+bower_components/
+
+# Logs and diagnostics
+*.log
+logs/
+*.log.*
+*.logs
+
+# Coverage reports
+*.coverage
+*.coveragexml
+
+# Miscellaneous
+Thumbs.db
+.DS_Store
+*.bak
+*.tmp
+*.temp
+*.pdb
