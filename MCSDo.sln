@@ -5,6 +5,8 @@ VisualStudioVersion = 17.13.36105.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateCAPIToken", "GenerateCAPIToken\GenerateCAPIToken.csproj", "{F2A91B0D-9AD8-41C5-816C-E6EDE02E08B8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADOCreateWorkItem", "ADOCreateWorkItem\ADOCreateWorkItem.csproj", "{46F668AD-815D-45A9-9F86-34D2209C471F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{F2A91B0D-9AD8-41C5-816C-E6EDE02E08B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2A91B0D-9AD8-41C5-816C-E6EDE02E08B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2A91B0D-9AD8-41C5-816C-E6EDE02E08B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46F668AD-815D-45A9-9F86-34D2209C471F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46F668AD-815D-45A9-9F86-34D2209C471F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46F668AD-815D-45A9-9F86-34D2209C471F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46F668AD-815D-45A9-9F86-34D2209C471F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
