@@ -1,0 +1,57 @@
+# Visual Studio / .NET Core
+## Ignore Visual Studio temporary files, build results, and user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.csproj.user
+.vscode/
+.idea/
+*.DotSettings.user
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
+x64/
+x86/
+[Aa]rchive/
+[Pp]ublish/
+*.nupkg
+*.snupkg
+
+## ASP.NET Core specific
+Src/wwwroot/*
+!wwwroot/.gitkeep  # Include an empty .gitkeep if you want to keep the wwwroot folder in Git
+
+## Logs and diagnostics
+*.log
+logs/
+*.trx
+*.tlog
+*.blat
+
+## Environment-specific settings
+appsettings.Development.json
+appsettings.*.json
+.env
+
+## NuGet Packages
+*.nupkg
+packages/
+*.nuget.props
+*.nuget.targets
+
+# Node.js / esbuild / Frontend
+## Node.js dependencies
+frontend/node_modules/
+frontend/package-lock.json
+frontend/yarn.lock
+
+## esbuild output (already covered by wwwroot/*, but explicit for clarity)
+wwwroot/app.js
+wwwroot/css/bootstrap.min.css
+wwwroot/index.html
+
+## Temporary
