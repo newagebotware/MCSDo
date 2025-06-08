@@ -1,0 +1,19 @@
+# SQLite database files
+chat.db
+chat.db-shm
+chat.db-wal
+# Node.js
+frontend/node_modules/
+frontend/package-lock.json
+# ASP.NET Core
+wwwroot/*
+!wwwroot/.gitkeep
+# Visual Studio
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+# Secrets
+appsettings.Development.json

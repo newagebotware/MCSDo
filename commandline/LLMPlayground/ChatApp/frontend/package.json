@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "build": "esbuild src/index.js --bundle --outfile=../wwwroot/app.js --minify",
+    "watch": "esbuild src/index.js --bundle --outfile=../wwwroot/app.js --watch"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.5",
+    "bootstrap": "^5.3.6"
+  }
+}
