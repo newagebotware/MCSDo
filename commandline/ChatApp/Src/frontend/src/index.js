@@ -6,16 +6,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const sendButton = document.getElementById('sendButton');
   const messagesDiv = document.getElementById('messages');
 
+  // Load transcript on startup
+  fetch('/api/chat/transcript')
+    .then(response => response.json())
+    .then(messages => {
+      messages.forEach(data => {
+        const messageElement = document.createElement('div');
+        messageElement.className = 'message';
+        messageElement.innerHTML = `<strong>${escapeHtml(data.user)}</strong> (${new Date(data.timestamp).toLocaleTimeString()}): ${escapeHtml(data.message)}`;
+        messagesDiv.appendChild(messageElement);
+      });
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+
   // Handle SSE connection
   const eventSource = new EventSource('/api/chat/stream');
-
   eventSource.onmessage = (event) => {
     const data = JSON.parse(event.data);
     const messageElement = document.createElement('div');
-    messageElement.className = 'message'; // Use custom class for styling
-    messageElement.innerHTML = `<strong>${data.user}</strong> (${new Date(data.timestamp).toLocaleTimeString()}): ${data.message}`;
+    messageElement.className = 'message';
+    messageElement.innerHTML = `<strong>${escapeHtml(data.user)}</strong> (${new Date(data.timestamp).toLocaleTimeString()}): ${escapeHtml(data.message)}`;
     messagesDiv.appendChild(messageElement);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to bottom
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
   };
 
   eventSource.onerror = () => {
@@ -34,18 +46,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const payload = { user, message };
-
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 
       if (response.ok) {
-        messageInput.value = ''; // Clear message input
+        messageInput.value = '';
       } else {
         alert('Failed to send message.');
       }
@@ -54,4 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Error sending message.');
     }
   });
+
+  // XSS prevention
+  function escapeHtml(str) {
+    return str.replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>').replace(/"/g, '"').replace(/'/g, '\'');
+  }
 });

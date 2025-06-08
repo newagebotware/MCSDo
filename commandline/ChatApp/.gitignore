@@ -22,6 +22,7 @@ x86/
 *.snupkg
 
 ## ASP.NET Core specific
+Src/chat.db
 Src/wwwroot/*
 !wwwroot/.gitkeep  # Include an empty .gitkeep if you want to keep the wwwroot folder in Git
 
