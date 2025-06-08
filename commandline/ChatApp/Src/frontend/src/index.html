@@ -3,13 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat App 2</title>
+  <title>Chat App</title>
   <link href="/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    #messages {
+      height: 240px; /* Approx. 10 lines at 24px per line */
+      overflow-y: auto; /* Scrollbar for overflow */
+      background-color: #f8f9fa; /* Light background for contrast */
+    }
+    .message {
+      line-height: 1.5; /* Consistent line height for messages */
+      margin-bottom: 8px; /* Spacing between messages */
+    }
+  </style>
 </head>
 <body>
   <div class="container mt-4">
     <h2>Chat App</h2>
-    <div id="messages" class="card p-3 mb-3" style="max-height: 400px; overflow-y: auto;"></div>
+    <div id="messages" class="card p-3 mb-3"></div>
     <div class="mb-3">
       <input id="userInput" type="text" class="form-control" placeholder="Your name">
     </div>

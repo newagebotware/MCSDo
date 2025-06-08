@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   eventSource.onmessage = (event) => {
     const data = JSON.parse(event.data);
     const messageElement = document.createElement('div');
-    messageElement.className = 'mb-2';
+    messageElement.className = 'message'; // Use custom class for styling
     messageElement.innerHTML = `<strong>${data.user}</strong> (${new Date(data.timestamp).toLocaleTimeString()}): ${data.message}`;
     messagesDiv.appendChild(messageElement);
     messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to bottom

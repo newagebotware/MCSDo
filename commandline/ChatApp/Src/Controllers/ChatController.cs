@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Concurrent;
 using System.Text;
 using System.Text.Json;
 
@@ -8,16 +9,22 @@ namespace ChatApp.Controllers
     [Route("api/[controller]")]
     public class ChatController : ControllerBase
     {
+        private static readonly ConcurrentQueue<ChatMessage> _messageQueue = new();
         private static readonly List<IResponseStream> _clients = new();
+        private static readonly CancellationTokenSource _cts = new();
+        private static readonly Task _processorTask;
 
-        // Model for incoming chat message
         public class ChatMessage
         {
             public string? User { get; set; }
             public string? Message { get; set; }
         }
 
-        // POST: api/chat
+        static ChatController()
+        {
+            _processorTask = Task.Run(() => ProcessMessagesAsync(_cts.Token));
+        }
+
         [HttpPost]
         public IActionResult PostMessage([FromBody] ChatMessage chatMessage)
         {
@@ -26,20 +33,10 @@ namespace ChatApp.Controllers
                 return BadRequest("Invalid message payload.");
             }
 
-            // Broadcast the message to all connected SSE clients
-            var messageData = JsonSerializer.Serialize(new
-            {
-                user = chatMessage.User,
-                message = chatMessage.Message,
-                timestamp = DateTime.UtcNow.ToString("o")
-            });
-
-            BroadcastMessage($"data: {messageData}\n\n");
-
+            _messageQueue.Enqueue(chatMessage);
             return Ok();
         }
 
-        // GET: api/chat/stream
         [HttpGet("stream")]
         public async Task Stream()
         {
@@ -52,12 +49,43 @@ namespace ChatApp.Controllers
 
             try
             {
-                // Keep the connection open for SSE
                 await client.KeepAlive();
             }
             finally
             {
                 _clients.Remove(client);
+            }
+        }
+
+        private static async Task ProcessMessagesAsync(CancellationToken cancellationToken)
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                if (_messageQueue.TryDequeue(out var chatMessage))
+                {
+                    var messageData = JsonSerializer.Serialize(new
+                    {
+                        user = chatMessage.User,
+                        message = chatMessage.Message,
+                        timestamp = DateTime.UtcNow.ToString("o")
+                    });
+                    BroadcastMessage($"data: {messageData}\n\n");
+
+                    if (chatMessage.Message != null && chatMessage.Message.Contains("abc", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var botMessage = JsonSerializer.Serialize(new
+                        {
+                            user = "bot",
+                            message = $"{chatMessage.User} said abc",
+                            timestamp = DateTime.UtcNow.ToString("o")
+                        });
+                        BroadcastMessage($"data: {botMessage}\n\n");
+                    }
+                }
+                else
+                {
+                    await Task.Delay(100, cancellationToken);
+                }
             }
         }
 
@@ -75,9 +103,16 @@ namespace ChatApp.Controllers
                 }
             }
         }
+
+        // Mark Dispose as NonAction to exclude from Swagger
+        [NonAction]
+        public void Dispose()
+        {
+            _cts.Cancel();
+            _cts.Dispose();
+        }
     }
 
-    // Helper class to manage SSE client streams
     public interface IResponseStream
     {
         Task WriteAsync(string message);
@@ -101,10 +136,9 @@ namespace ChatApp.Controllers
 
         public async Task KeepAlive()
         {
-            // Keep the connection open until cancelled
             while (!_response.HttpContext.RequestAborted.IsCancellationRequested)
             {
-                await Task.Delay(1000); // Send a keep-alive ping or wait
+                await Task.Delay(1000);
             }
         }
     }
