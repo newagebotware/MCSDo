@@ -17,6 +17,8 @@
 <Target Name="BuildFrontend" BeforeTargets="Build">
   <!-- Ensure wwwroot/css directory exists -->
   <MakeDir Directories="wwwroot/css" />
+ <!-- Install Node.js dependencies -->
+  <Exec WorkingDirectory="frontend" Command="npm install" Condition="!Exists('frontend/node_modules')" />
   <!-- Run esbuild to bundle JavaScript -->
   <Exec WorkingDirectory="frontend" Command="npm run build" />
   <!-- Copy index.html to wwwroot -->
