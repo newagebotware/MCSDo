@@ -2,6 +2,58 @@
 
 public class Tools
 {
+    public static List<ToolDefinition> GetNextFile = new List<ToolDefinition>
+    {
+        new ToolDefinition
+        {
+            Function = new ToolFunction
+            {
+                Name = "readFileContents",
+                Description = "Read the contents of a file",
+                Parameters = new ToolParameters
+                {
+                    Properties = new Dictionary<string, ToolProperty>
+                    {
+                        {
+                            "fileName", new ToolProperty
+                            {
+                                Type = "string",
+                                Description = "the name of the file to read"
+                            }
+                        }
+                    },
+                    Required = new List<string> { "fileName" }
+                }
+            }
+        },
+    };
+
+    public static List<ToolDefinition> UpdateUnderstanding = new List<ToolDefinition>
+    {
+        new ToolDefinition
+        {
+            Function = new ToolFunction
+            {
+                Name = "UpdateUnderstanding",
+                Description = "Provide the updated understanding of the source base",
+                Parameters = new ToolParameters
+                {
+                    Properties = new Dictionary<string, ToolProperty>
+                    {
+                        {
+                            "understanding", new ToolProperty
+                            {
+                                Type = "string",
+                                Description = "The total understanding of the codebase"
+                            }
+                        }
+                    },
+                    Required = new List<string> { "understanding" }
+                }
+            }
+        }
+    };
+
     public static List<ToolDefinition> Definitions = new List<ToolDefinition>
     {
         new ToolDefinition
@@ -67,6 +119,28 @@ public class Tools
                         }
                     },
                     Required = new List<string> { "fileName" }
+                }
+            }
+        },
+        new ToolDefinition
+        {
+            Function = new ToolFunction
+            {
+                Name = "UpdateUnderstanding",
+                Description = "Provide the updated understanding of the source base",
+                Parameters = new ToolParameters
+                {
+                    Properties = new Dictionary<string, ToolProperty>
+                    {
+                        {
+                            "understanding", new ToolProperty
+                            {
+                                Type = "string",
+                                Description = "The total understanding of the codebase"
+                            }
+                        }
+                    },
+                    Required = new List<string> { "understanding" }
                 }
             }
         }

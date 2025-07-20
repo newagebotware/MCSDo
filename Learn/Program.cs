@@ -2,7 +2,17 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
+
+record FileName
+{
+    public string fileName { get; init; }
+}
+record Understanding
+{
+    public string understanding { get; init; }
+}
 
 class Program
 {
@@ -11,25 +21,28 @@ class Program
         string apiKey = await CapiToken.GetToken();
         var client = new OpenAIChatClient(apiKey);
 
-        var messages = new List<ChatMessage>
-        {
-            new ChatMessage
-            {
-                Role = "system",
-                Content = "You are an AI agent that is very good at explaining large code bases to new engineers onboarding. You use the tools to undestand the code base."
-            },
-            new ChatMessage
-            {
-                Role = "system",
-                Content = "What you know so far is the following is that the source code is listed unde C:\\s\\om2\\src"
-            },
-        };
-
+        var understanding = "";
         try
         {
-            var result = await client.CreateChatCompletionAsync(messages, Tools.Definitions);
-            Console.WriteLine("Response from OpenAI:");
-            Console.WriteLine(result);
+            while (true)
+            {
+                var c = Context.FindNextFile(understanding, FileList.Data);
+                var result = await client.CreateChatCompletionAsync(c, Tools.GetNextFile);
+                Console.WriteLine("Response from OpenAI:");
+                var fnStr = result.Completions[0].ToolCalls[0].Function.Arguments;
+                var fn = JsonSerializer.Deserialize<FileName>(fnStr).fileName;
+
+
+                c = await Context.AddUnderstanding(understanding, $"C:\\s\\om2\\{fn}");
+                result = await client.CreateChatCompletionAsync(c, Tools.UpdateUnderstanding);
+                Console.WriteLine("Response from OpenAI:");
+                var u = result.Completions[0].ToolCalls[0].Function.Arguments;
+                understanding = JsonSerializer.Deserialize<Understanding>(u).understanding;
+
+
+
+                Console.WriteLine(result);
+            }
         }
         catch (Exception ex)
         {
